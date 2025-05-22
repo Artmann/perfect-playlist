@@ -1,0 +1,11 @@
+.react-router/
+build/
+coverage/
+dist/
+node_modules/
+
+.env
+*.log
+.DS_Store
+*.tgz
+*.zip
