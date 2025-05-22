@@ -16,7 +16,7 @@ const PlaylistSchema = z.object({
         artist: z.string().describe('The artist name')
       })
     )
-    .describe('A list of 10-15 songs that match the description')
+    .describe('A list of 32-40 songs that match the description')
 })
 
 export async function action({ request }: Route.ActionArgs) {
@@ -44,7 +44,7 @@ export async function action({ request }: Route.ActionArgs) {
     )
 
     const result = await generateObject({
-      model: anthropic('claude-sonnet-4-0'),
+      model: anthropic('claude-3-5-haiku-latest'),
       schema: PlaylistSchema,
       prompt: `You are an AI music curator tasked with generating personalized playlists
       based on users' vibes. Your goal is to create a playlist that captures the essence
