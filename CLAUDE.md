@@ -96,3 +96,62 @@ Deployed on Render with automatic builds from the main branch.
 
 The codebase follows React Router v7 conventions with type-safe route
 definitions and automatic code splitting.
+
+## Code Style Guidelines
+
+### React Component Props and Object Fields
+
+#### Prop Ordering for React Components
+
+Follow this specific order for React component props:
+
+1. **Special React props first**: `key`, `ref`
+2. **Regular props**: All other props in alphabetical order
+3. **Event handlers/methods last**: All `on*` props in alphabetical order
+
+```tsx
+// ✅ Good - props sorted with correct priority
+<YouTubePlayer
+  ref={player.playerRef}
+  isPlaying={player.isPlaying}
+  playerReady={player.playerReady}
+  playerState={player.playerState}
+  onTogglePlay={player.togglePlayPause}
+/>
+
+// ❌ Bad - methods mixed with regular props
+<YouTubePlayer
+  ref={player.playerRef}
+  onTogglePlay={player.togglePlayPause}
+  isPlaying={player.isPlaying}
+  playerReady={player.playerReady}
+  playerState={player.playerState}
+/>
+```
+
+#### General Alphabetical Sorting
+
+For other contexts, sort fields alphabetically:
+
+```tsx
+// ✅ Good - interface fields sorted alphabetically
+interface Song {
+  artist: string
+  title: string
+  youtubeId?: string
+}
+
+// ✅ Good - object literals sorted alphabetically
+const playlist = {
+  description: "My playlist",
+  id: "123",
+  songs: [],
+  title: "Cool Songs"
+}
+```
+
+This applies to:
+- JSX element props (with special ordering above)
+- Object literals
+- Interface/type definitions
+- Function parameters (when using object destructuring)

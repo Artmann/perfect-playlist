@@ -7,8 +7,8 @@ interface ErrorBoundaryProps {
 }
 
 interface ErrorBoundaryState {
-  hasError: boolean
   error?: Error
+  hasError: boolean
 }
 
 export default class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
@@ -18,7 +18,7 @@ export default class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBo
   }
 
   static getDerivedStateFromError(error: Error): ErrorBoundaryState {
-    return { hasError: true, error }
+    return { error, hasError: true }
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
@@ -38,8 +38,8 @@ export default class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBo
               We encountered an error while loading the playlist. Please try refreshing the page.
             </p>
             <button
-              onClick={() => window.location.reload()}
               className="bg-black text-white px-6 py-2 rounded-lg hover:bg-gray-800 transition-colors"
+              onClick={() => window.location.reload()}
             >
               Refresh Page
             </button>

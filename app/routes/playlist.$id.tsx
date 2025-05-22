@@ -4,17 +4,17 @@ import PlaylistComponent from '~/components/Playlist'
 import { searchYouTubeVideoId } from '~/lib/utils/youtube-scraper'
 
 interface Song {
-  title: string
   artist: string
+  title: string
   youtubeId?: string
 }
 
 interface PlaylistDto {
-  id: string
-  title: string
   description: string
-  songs: Song[]
+  id: string
   prompt?: string
+  songs: Song[]
+  title: string
 }
 
 
@@ -57,11 +57,11 @@ export async function loader({ params }: Route.LoaderArgs) {
 
     return {
       playlist: {
-        id: playlist.id,
-        title: playlist.title,
         description: playlist.description,
+        id: playlist.id,
+        prompt: playlist.prompt,
         songs: songsWithYouTube,
-        prompt: playlist.prompt
+        title: playlist.title
       }
     }
   } catch (error) {

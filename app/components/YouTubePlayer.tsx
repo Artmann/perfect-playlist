@@ -1,14 +1,14 @@
 import { forwardRef } from 'react'
 
 interface YouTubePlayerProps {
-  playerReady: boolean
   isPlaying: boolean
-  playerState: number
   onTogglePlay: () => void
+  playerReady: boolean
+  playerState: number
 }
 
 const YouTubePlayer = forwardRef<HTMLDivElement, YouTubePlayerProps>(
-  ({ playerReady, isPlaying, playerState, onTogglePlay }, ref) => {
+  ({ isPlaying, onTogglePlay, playerReady, playerState }, ref) => {
     const showPlayOverlay = playerReady && 
       !isPlaying && 
       playerState !== window.YT?.PlayerState?.BUFFERING

@@ -1,11 +1,11 @@
 interface PlaylistHeaderProps {
-  title: string
   songCount: number
+  title: string
 }
 
 export default function PlaylistHeader({
-  title,
-  songCount
+  songCount,
+  title
 }: PlaylistHeaderProps) {
   return (
     <div className="bg-black text-white p-4 md:p-6 py-8">

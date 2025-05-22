@@ -9,17 +9,17 @@ import SongList from '~/components/SongList'
 import ErrorBoundary from '~/components/ErrorBoundary'
 
 export interface Song {
-  title: string
   artist: string
+  title: string
   youtubeId?: string
 }
 
 export interface PlaylistDto {
-  id: string
-  title: string
   description: string
-  songs: Song[]
+  id: string
   prompt?: string
+  songs: Song[]
+  title: string
 }
 
 interface PlaylistProps {
@@ -71,13 +71,13 @@ export default function Playlist({ playlist }: PlaylistProps) {
   )
 
   const player = useYouTubePlayer({
-    videoId: playlistState.currentSong?.youtubeId,
-    startTime: savedState.currentTime,
-    volume: playlistState.volume,
-    onStateChange,
     onError,
     onNearEnd,
-    onTimeUpdate
+    onStateChange,
+    onTimeUpdate,
+    startTime: savedState.currentTime,
+    videoId: playlistState.currentSong?.youtubeId,
+    volume: playlistState.volume
   })
 
   const handleSongClick = (song: Song, index: number) => {
@@ -91,24 +91,24 @@ export default function Playlist({ playlist }: PlaylistProps) {
     <ErrorBoundary>
       <div className="h-screen bg-white overflow-hidden flex flex-col max-w-4xl mx-auto">
         <PlaylistHeader
-          title={playlist.title}
           songCount={playlist.songs.length}
+          title={playlist.title}
         />
 
         <section className="px-4 md:px-6 py-12">
           <YouTubePlayer
             ref={player.playerRef}
-            playerReady={player.playerReady}
             isPlaying={player.isPlaying}
+            playerReady={player.playerReady}
             playerState={player.playerState}
             onTogglePlay={player.togglePlayPause}
           />
         </section>
 
         <SongList
-          songs={playlist.songs}
           currentSongIndex={playlistState.currentSongIndex}
           isPlaying={player.isPlaying}
+          songs={playlist.songs}
           onSongClick={handleSongClick}
         />
       </div>

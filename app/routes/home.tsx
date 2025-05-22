@@ -120,9 +120,9 @@ export default function Home() {
             />
 
             <Button
-              type="submit"
-              disabled={isSubmitting}
               className="w-full text-base md:text-lg py-4 md:py-6"
+              disabled={isSubmitting}
+              type="submit"
             >
               {isSubmitting ? 'Generating Playlist...' : 'Generate Playlist'}
             </Button>
