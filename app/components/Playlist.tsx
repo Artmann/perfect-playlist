@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useMemo, useCallback } from 'react'
 import { Button } from '~/components/ui/button'
 import { useYouTubePlayer } from '~/lib/hooks/useYouTubePlayer'
 import { usePlaylistState } from '~/lib/hooks/usePlaylistState'
@@ -32,36 +32,43 @@ export default function Playlist({ playlist }: PlaylistProps) {
     songs: playlist.songs
   })
 
-  const savedState = loadPlaylistState(playlist.id)
+  const savedState = useMemo(() => loadPlaylistState(playlist.id), [playlist.id])
   
+  const onStateChange = useCallback((state: number) => {
+    if (state === window.YT?.PlayerState?.ENDED) {
+      const nextSong = playlistState.goToNextSong()
+      if (nextSong) {
+        player.loadVideo(nextSong.song.youtubeId!, 0)
+      }
+    }
+  }, [playlistState.goToNextSong])
+
+  const onError = useCallback(() => {
+    const nextSong = playlistState.goToNextSong()
+    if (nextSong) {
+      player.loadVideo(nextSong.song.youtubeId!, 0)
+    }
+  }, [playlistState.goToNextSong])
+
+  const onNearEnd = useCallback(() => {
+    const nextSong = playlistState.goToNextSong()
+    if (nextSong) {
+      player.loadVideo(nextSong.song.youtubeId!, 0)
+    }
+  }, [playlistState.goToNextSong])
+
+  const onTimeUpdate = useCallback((currentTime: number) => {
+    playlistState.saveCurrentState(currentTime)
+  }, [playlistState.saveCurrentState])
+
   const player = useYouTubePlayer({
     videoId: playlistState.currentSong?.youtubeId,
     startTime: savedState.currentTime,
     volume: playlistState.volume,
-    onStateChange: (state) => {
-      if (state === window.YT?.PlayerState?.ENDED) {
-        const nextSong = playlistState.goToNextSong()
-        if (nextSong) {
-          player.loadVideo(nextSong.song.youtubeId!, 0)
-        }
-      }
-    },
-    onError: () => {
-      const nextSong = playlistState.goToNextSong()
-      if (nextSong) {
-        player.loadVideo(nextSong.song.youtubeId!, 0)
-      }
-    },
-    onNearEnd: () => {
-      const nextSong = playlistState.goToNextSong()
-      if (nextSong) {
-        player.loadVideo(nextSong.song.youtubeId!, 0)
-      }
-    },
-    onTimeUpdate: (currentTime) => {
-      // Save current time every second while playing
-      playlistState.saveCurrentState(currentTime)
-    }
+    onStateChange,
+    onError,
+    onNearEnd,
+    onTimeUpdate
   })
 
 

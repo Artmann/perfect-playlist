@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import type { Song } from '~/components/Playlist'
 import { savePlaylistState, loadPlaylistState, createStorageKey, removeFromStorage } from '~/lib/utils/storage'
 
@@ -92,7 +92,7 @@ export const usePlaylistState = ({ playlistId, songs }: UsePlaylistStateProps) =
     setVolume(newVolume)
   }, [])
 
-  return {
+  return useMemo(() => ({
     currentSongIndex,
     currentSong,
     volume,
@@ -101,5 +101,5 @@ export const usePlaylistState = ({ playlistId, songs }: UsePlaylistStateProps) =
     goToSong,
     updateVolume,
     saveCurrentState
-  }
+  }), [currentSongIndex, currentSong, volume, goToNextSong, goToPreviousSong, goToSong, updateVolume, saveCurrentState])
 }

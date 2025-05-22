@@ -74,7 +74,7 @@ export const useYouTubePlayer = ({
         }
       }, 1000)
     }, 200)
-  }, [])
+  }, [onTimeUpdate, onNearEnd])
 
   const stopTimeTracking = useCallback(() => {
     if (timeTrackingInterval.current) {
@@ -173,7 +173,7 @@ export const useYouTubePlayer = ({
     })
 
     setPlayer(ytPlayer)
-  }, [videoId, startTime, volume, startTimeTracking, stopTimeTracking, onReady, onStateChange, onError])
+  }, [videoId, startTime, volume, onReady, onStateChange, onError])
 
   const loadYouTubeAPI = useCallback(() => {
     if (typeof window === 'undefined') return
@@ -231,8 +231,10 @@ export const useYouTubePlayer = ({
   }, [player])
 
   const loadVideo = useCallback((newVideoId: string, startSeconds = 0) => {
+    if (!player || typeof player.loadVideoById !== 'function') return
+    
     hasTriggeredNearEnd.current = false // Reset flag when loading new video
-    player?.loadVideoById(newVideoId, startSeconds)
+    player.loadVideoById(newVideoId, startSeconds)
     
     // Ensure the video starts playing after loading
     setTimeout(() => {
