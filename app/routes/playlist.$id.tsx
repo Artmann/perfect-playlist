@@ -1,6 +1,7 @@
 import type { Route } from './+types/playlist.$id'
 import { Playlist } from '~/lib/models/playlist'
 import PlaylistComponent from '~/components/Playlist'
+import { searchYouTubeVideoId } from '~/lib/utils/youtube-scraper'
 
 interface Song {
   title: string
@@ -16,36 +17,6 @@ interface PlaylistDto {
   prompt?: string
 }
 
-async function searchYouTubeVideo(query: string): Promise<string | null> {
-  try {
-    const apiKey = process.env.RAPID_API_KEY
-    if (!apiKey) {
-      console.error('RAPID_API_KEY not found')
-      return null
-    }
-
-    const url = `https://youtube-v31.p.rapidapi.com/search?q=${encodeURIComponent(query)}&part=snippet%2Cid&regionCode=US&maxResults=1`
-    const options = {
-      method: 'GET',
-      headers: {
-        'x-rapidapi-key': apiKey,
-        'x-rapidapi-host': 'youtube-v31.p.rapidapi.com'
-      }
-    }
-
-    const response = await fetch(url, options)
-    const result = await response.json()
-    
-    if (result.items && result.items.length > 0 && result.items[0].id?.videoId) {
-      return result.items[0].id.videoId
-    }
-    
-    return null
-  } catch (error) {
-    console.error('Error searching YouTube:', error)
-    return null
-  }
-}
 
 export async function loader({ params }: Route.LoaderArgs) {
   try {
@@ -65,7 +36,7 @@ export async function loader({ params }: Route.LoaderArgs) {
         
         // Search for YouTube video
         const query = `${song.title} ${song.artist}`
-        const youtubeId = await searchYouTubeVideo(query)
+        const youtubeId = await searchYouTubeVideoId(query)
         
         return {
           ...song,

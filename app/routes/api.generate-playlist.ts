@@ -4,6 +4,7 @@ import striptags from 'striptags'
 import { z } from 'zod'
 
 import { Playlist } from '~/lib/models/playlist'
+import { searchMultipleSongs } from '~/lib/utils/youtube-scraper'
 import type { Route } from './+types/api.generate-playlist'
 
 const PlaylistSchema = z.object({
@@ -70,11 +71,14 @@ the following when selecting songs:
 `
     })
 
+    // Search for YouTube video IDs for each song
+    const songsWithVideoIds = await searchMultipleSongs(result.object.songs)
+
     // Create and save playlist to database
     const playlist = await Playlist.create({
       title: result.object.title,
       description: description,
-      songs: result.object.songs,
+      songs: songsWithVideoIds,
       prompt: sanitizedDescription
     })
 
