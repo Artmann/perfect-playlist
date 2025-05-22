@@ -87,11 +87,6 @@ export default function Playlist({ playlist }: PlaylistProps) {
     }
   }
 
-  const handleVolumeChange = (newVolume: number) => {
-    playlistState.updateVolume(newVolume)
-    player.setVolume(newVolume)
-  }
-
   return (
     <ErrorBoundary>
       <div className="h-screen bg-white overflow-hidden flex flex-col max-w-4xl mx-auto">
