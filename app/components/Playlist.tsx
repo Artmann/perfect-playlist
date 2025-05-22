@@ -32,16 +32,22 @@ export default function Playlist({ playlist }: PlaylistProps) {
     songs: playlist.songs
   })
 
-  const savedState = useMemo(() => loadPlaylistState(playlist.id), [playlist.id])
-  
-  const onStateChange = useCallback((state: number) => {
-    if (state === window.YT?.PlayerState?.ENDED) {
-      const nextSong = playlistState.goToNextSong()
-      if (nextSong) {
-        player.loadVideo(nextSong.song.youtubeId!, 0)
+  const savedState = useMemo(
+    () => loadPlaylistState(playlist.id),
+    [playlist.id]
+  )
+
+  const onStateChange = useCallback(
+    (state: number) => {
+      if (state === window.YT?.PlayerState?.ENDED) {
+        const nextSong = playlistState.goToNextSong()
+        if (nextSong) {
+          player.loadVideo(nextSong.song.youtubeId!, 0)
+        }
       }
-    }
-  }, [playlistState.goToNextSong])
+    },
+    [playlistState.goToNextSong]
+  )
 
   const onError = useCallback(() => {
     const nextSong = playlistState.goToNextSong()
@@ -57,9 +63,12 @@ export default function Playlist({ playlist }: PlaylistProps) {
     }
   }, [playlistState.goToNextSong])
 
-  const onTimeUpdate = useCallback((currentTime: number) => {
-    playlistState.saveCurrentState(currentTime)
-  }, [playlistState.saveCurrentState])
+  const onTimeUpdate = useCallback(
+    (currentTime: number) => {
+      playlistState.saveCurrentState(currentTime)
+    },
+    [playlistState.saveCurrentState]
+  )
 
   const player = useYouTubePlayer({
     videoId: playlistState.currentSong?.youtubeId,
@@ -70,7 +79,6 @@ export default function Playlist({ playlist }: PlaylistProps) {
     onNearEnd,
     onTimeUpdate
   })
-
 
   const handleSongClick = (song: Song, index: number) => {
     const result = playlistState.goToSong(index)
@@ -86,36 +94,28 @@ export default function Playlist({ playlist }: PlaylistProps) {
 
   return (
     <ErrorBoundary>
-      <div className="min-h-screen bg-white">
-        <PlaylistHeader title={playlist.title} songCount={playlist.songs.length} />
+      <div className="h-screen bg-white overflow-hidden flex flex-col max-w-4xl mx-auto">
+        <PlaylistHeader
+          title={playlist.title}
+          songCount={playlist.songs.length}
+        />
 
-        <div className="max-w-4xl mx-auto p-4 md:p-6">
-          <div className="mb-8">
-            <YouTubePlayer
-              ref={player.playerRef}
-              playerReady={player.playerReady}
-              isPlaying={player.isPlaying}
-              playerState={player.playerState}
-              onTogglePlay={player.togglePlayPause}
-            />
-          </div>
-
-          <SongList
-            songs={playlist.songs}
-            currentSongIndex={playlistState.currentSongIndex}
+        <section className="px-4 md:px-6 py-12">
+          <YouTubePlayer
+            ref={player.playerRef}
+            playerReady={player.playerReady}
             isPlaying={player.isPlaying}
-            onSongClick={handleSongClick}
+            playerState={player.playerState}
+            onTogglePlay={player.togglePlayPause}
           />
+        </section>
 
-          <div className="mt-8 pt-8 border-t border-gray-200">
-            <Button
-              onClick={() => (window.location.href = '/')}
-              className="w-full md:w-auto"
-            >
-              Create New Playlist
-            </Button>
-          </div>
-        </div>
+        <SongList
+          songs={playlist.songs}
+          currentSongIndex={playlistState.currentSongIndex}
+          isPlaying={player.isPlaying}
+          onSongClick={handleSongClick}
+        />
       </div>
     </ErrorBoundary>
   )
