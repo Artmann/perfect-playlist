@@ -876,6 +876,11 @@
   dependencies:
     tslib "^2.4.0"
 
+"@types/bluebird@^3.5.42":
+  version "3.5.42"
+  resolved "https://registry.yarnpkg.com/@types/bluebird/-/bluebird-3.5.42.tgz#7ec05f1ce9986d920313c1377a5662b1b563d366"
+  integrity sha512-Jhy+MWRlro6UjVi578V/4ZGNfeCOcNCp0YaFNIUGFKlImowqwb1O/22wDVk3FDGMLqxdpOV3qQHD5fPEH4hK6A==
+
 "@types/diff-match-patch@^1.0.36":
   version "1.0.36"
   resolved "https://registry.yarnpkg.com/@types/diff-match-patch/-/diff-match-patch-1.0.36.tgz#dcef10a69d357fe9d43ac4ff2eca6b85dbf466af"
@@ -990,6 +995,11 @@ basic-auth@~2.0.1:
   integrity sha512-NF+epuEdnUYVlGuhaxbbq+dvJttwLnGY+YixlXlME5KpQ5W3CnXA5cVTneY3SPbPDRkcjMbifrwmFYcClgOZeg==
   dependencies:
     safe-buffer "5.1.2"
+
+bluebird@^3.7.2:
+  version "3.7.2"
+  resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.7.2.tgz#9f229c15be272454ffa973ace0dbee79a1b0c36f"
+  integrity sha512-XpNj6GDQzdfW+r2Wnn7xiSAd7TM3jzkxGXBGTtWKuSXv1xUV+azxAm8jdWZN06QTQk+2N2XB9jRDkvbmQmcRtg==
 
 body-parser@1.20.3:
   version "1.20.3"
@@ -2604,6 +2614,13 @@ throttleit@2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/throttleit/-/throttleit-2.1.0.tgz#a7e4aa0bf4845a5bd10daa39ea0c783f631a07b4"
   integrity sha512-nt6AMGKW1p/70DF/hGBdJB57B8Tspmbp5gfJ8ilhLnt7kkr2ye7hzD6NVG8GGErk2HWF34igrL2CXmNIkzKqKw==
+
+tiny-typescript-logger@^3.2.3:
+  version "3.2.3"
+  resolved "https://registry.yarnpkg.com/tiny-typescript-logger/-/tiny-typescript-logger-3.2.3.tgz#e67fd1acc48ac09d1418be55c2fc29264603f622"
+  integrity sha512-fp8ox0/WkLDwT4LIZd57GS0oeVlSvotbrJtTbDOuy5ESZU7aD8Sl/uEOyEpQneRGGKRwvhvEXAuNEZ46gUD44Q==
+  dependencies:
+    chalk "^5.3.0"
 
 tinyglobby@^0.2.13:
   version "0.2.13"
