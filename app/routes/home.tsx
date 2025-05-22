@@ -1,9 +1,8 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useNavigate } from 'react-router'
 
 import type { Route } from './+types/home'
 import { Textarea } from '~/components/ui/textarea'
-import { Label } from '~/components/ui/label'
 import { Button } from '~/components/ui/button'
 
 export function meta({}: Route.MetaArgs) {
@@ -16,15 +15,45 @@ export function meta({}: Route.MetaArgs) {
   ]
 }
 
+const examplePrompts = [
+  // Mood & Atmosphere
+  'Create a playlist for a cozy rainy Sunday morning with coffee',
+  'I need music for feeling like the main character walking through a neon-lit city at night',
+  'Give me songs that feel like golden hour drives through the countryside',
+
+  // Activities & Scenarios
+  'Perfect background music for a dinner party with friends who have great taste',
+  "Songs for when I'm deep cleaning my apartment and need to stay motivated",
+  'Music for a road trip through the desert with my best friend',
+
+  // Nostalgic & Temporal
+  "Make me feel like I'm in a 90s coming-of-age movie",
+  'Songs that sound like summer camp in 2003',
+  "Music for pretending I'm in a French café in the 1960s",
+
+  // Genre Fusion
+  'Indie folk meets electronic beats for studying',
+  'Jazz-influenced hip hop for late night creative sessions',
+  'Punk energy but make it danceable',
+
+  // Emotional Journey
+  'Take me from heartbreak to healing in 12 songs',
+  'Music that starts contemplative and builds to euphoric',
+  "Songs for when you're sad but trying to be optimistic about it"
+]
+
 export default function Home() {
-  const [description, setDescription] = useState(
-    "early 2000's R&B songs that's perfect when spending the day in Barcelona"
-  )
+  const [description, setDescription] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const navigate = useNavigate()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+
+    if (!description.trim()) {
+      return
+    }
+
     setIsSubmitting(true)
 
     try {
@@ -51,6 +80,10 @@ export default function Home() {
     }
   }
 
+  const handleExampleClick = (prompt: string) => {
+    setDescription(prompt)
+  }
+
   return (
     <div className="min-h-screen bg-white p-4 md:p-8">
       <div className="max-w-2xl mx-auto pt-8 md:pt-16">
@@ -63,44 +96,60 @@ export default function Home() {
           </p>
         </div>
 
-        <form onSubmit={handleSubmit}>
-          <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-4 md:p-8">
-            <div className="space-y-4 md:space-y-6">
-              <div className="space-y-2">
-                <Label
-                  htmlFor="description"
-                  className="text-base md:text-lg font-medium text-gray-900"
-                >
-                  What do you want to listen to?
-                </Label>
-                <Textarea
-                  id="description"
-                  placeholder="Describe your perfect playlist..."
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' && !e.shiftKey) {
-                      e.preventDefault()
-                      if (!isSubmitting && description.trim()) {
-                        handleSubmit(e as any)
-                      }
-                    }
-                  }}
-                  disabled={isSubmitting}
-                  className="min-h-[100px] md:min-h-[120px] text-base md:text-lg resize-none"
-                />
-              </div>
+        <form
+          className="mb-8"
+          onSubmit={handleSubmit}
+        >
+          <div className="space-y-4 md:space-y-6">
+            <Textarea
+              className="text-sm h-32"
+              disabled={isSubmitting}
+              id="description"
+              placeholder="What do you want to listen to?"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                  e.preventDefault()
+                  if (!isSubmitting && description.trim()) {
+                    handleSubmit(e as any)
+                  }
+                }
+              }}
+            />
 
-              <Button
-                type="submit"
-                disabled={isSubmitting || !description.trim()}
-                className="w-full text-base md:text-lg py-4 md:py-6"
-              >
-                {isSubmitting ? 'Generating Playlist...' : 'Generate Playlist'}
-              </Button>
-            </div>
+            <Button
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full text-base md:text-lg py-4 md:py-6"
+            >
+              {isSubmitting ? 'Generating Playlist...' : 'Generate Playlist'}
+            </Button>
           </div>
         </form>
+
+        {/* Example Prompts */}
+        <div>
+          <div className="grid grid-cols-2 gap-2">
+            {examplePrompts.map((prompt, index) => (
+              <div
+                key={index}
+                className={`
+                  px-2 py-3
+                  max-w-xs
+                  border border-gray-200 hover:border-gray-300
+                  rounded-lg
+                  text-center text-xs text-gray-700 hover:text-gray-900
+                  cursor-pointer
+                  transition  
+                `}
+                onClick={() => handleExampleClick(prompt)}
+              >
+                {prompt}
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   )
